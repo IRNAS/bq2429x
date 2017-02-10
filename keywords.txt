@@ -1,0 +1,20 @@
+#######################################
+# Syntax Coloring Map For LiFuelGauge #
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)                #
+#######################################
+
+bq2429x	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)    #
+#######################################
+
+getStatus	KEYWORD2
+getFaults	KEYWORD2
+setChargeVoltage	KEYWORD2
+setChargeCurrent	KEYWORD2
+setInputCurrentLimit	KEYWORD2
+setInputVoltageLimit	KEYWORD2
