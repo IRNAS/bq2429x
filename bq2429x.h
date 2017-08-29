@@ -21,29 +21,39 @@
 
 // bq2429x register addresses
 const int bq2429x_ADDR = 0x6b;
-const int bq2429x_INPUT_CTRL_ADDR = 0x00; // Input Source Control Register REG00 [reset = 00110xxx, or 3x]
-const int bq2429x_POWERON_CTRL_ADDR = 0x01; // Power-On Configuration Register REG01 [reset = 00011011, or 0x1B]
-const int bq2429x_CHARGE_CUR_CTRL_ADDR = 0x02; // Charge Current Control Register REG02 [reset = 01100000, or 60]
-const int bq2429x_PRECHARGE_CTRL_ADDR = 0x03; // Pre-Charge/Termination Current Control Register REG03 [reset = 00010001, or 0x11]
-const int bq2429x_CHARGE_VOL_CTRL_ADDR = 0x04; // Charge Voltage Control Register REG04 [reset = 10110010, or 0xB2]
-const int bq2429x_CHARGE_TERM_CTRL_ADDR = 0x05; // Charge Termination/Timer Control Register REG05 [reset = 10011010, or 0x9A]
-const int bq2429x_BOOST_THERMAL_CTRL_ADDR = 0x06; // Boost Voltage/Thermal Regulation Control Register REG06 [reset = 01110011, or 0x73]
-const int bq2429x_MISC_CTRL_ADDR = 0x07; // Misc Operation Control Register REG07 [reset = 01001011, or 4B]
-const int bq2429x_STATUS_ADDR = 0x08; // System Status Register REG08
-const int bq2429x_FAULT_ADDR = 0x09; // New Fault Register REG09
-const int bq2429x_VENDOR_ADDR = 0x0A; // Vender / Part / Revision Status Register REG0A
+const int bq2429x_INPUT_CTRL_ADDR = 0x00;           // Input Source Control Register REG00 [reset = 00110xxx, or 3x]
+const int bq2429x_POWERON_CTRL_ADDR = 0x01;         // Power-On Configuration Register REG01 [reset = 00011011, or 0x1B]
+const int bq2429x_CHARGE_CUR_CTRL_ADDR = 0x02;      // Charge Current Control Register REG02 [reset = 01100000, or 60]
+const int bq2429x_PRECHARGE_CTRL_ADDR = 0x03;       // Pre-Charge/Termination Current Control Register REG03 [reset = 00010001, or 0x11]
+const int bq2429x_CHARGE_VOL_CTRL_ADDR = 0x04;      // Charge Voltage Control Register REG04 [reset = 10110010, or 0xB2]
+const int bq2429x_CHARGE_TERM_CTRL_ADDR = 0x05;     // Charge Termination/Timer Control Register REG05 [reset = 10011010, or 0x9A]
+const int bq2429x_BOOST_THERMAL_CTRL_ADDR = 0x06;   // Boost Voltage/Thermal Regulation Control Register REG06 [reset = 01110011, or 0x73]
+const int bq2429x_MISC_CTRL_ADDR = 0x07;            // Misc Operation Control Register REG07 [reset = 01001011, or 4B]
+const int bq2429x_STATUS_ADDR = 0x08;               // System Status Register REG08
+const int bq2429x_FAULT_ADDR = 0x09;                // New Fault Register REG09
+const int bq2429x_VENDOR_ADDR = 0x0A;               // Vender / Part / Revision Status Register REG0A
 
 // Class for interfacing the bq2429x
 class bq2429x
 {
 public:
 	bq2429x();
-    uint8_t getStatus();
-    uint8_t getFaults();
-    void setChargeVoltage(double voltage);
-    void setChargeCurrent(double current);
-    void setInputCurrentLimit(double current);
-    void setInputVoltageLimit(double voltage);
+    uint8_t     getStatus();
+    uint8_t     getFaults();
+
+    uint8_t     getVBus();
+    uint8_t     getCharge();
+    uint8_t     getDMP();
+    uint8_t     getPG();
+    uint8_t     getTHERM();
+    uint8_t     getVSYS();
+
+    uint8_t     getChgFault();
+    uint8_t     getWatchdogFault();
+    uint8_t     getOTGFault();
+    uint8_t     getBATFault();
+    uint8_t     getNTC1Fault();
+    uint8_t     getNTC0Fault();
 };
 
 #endif  // bq2429x
