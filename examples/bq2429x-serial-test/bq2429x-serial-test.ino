@@ -4,7 +4,7 @@
  */
 
 #include <Wire.h>
-#include <bq2429x.h>
+#include "bq2429x.h"
 
 bq2429x charger;
 
@@ -17,93 +17,115 @@ void setup()
 
 void loop()
 {
-    uint8_t status = charger.getStatus();
-    Serial.print("Status: 0b");
-    Serial.println(status,BIN);  // Gets charger status
-    
-    //Decode status:
-    uint8_t vbus_status = status >> 6;
-    Serial.print("Voltage input: ");
-    switch (vbus_status) {
-    case 0:
-      Serial.print("unknown");
-      break;
-    case 1:
-      Serial.print("USB");
-      break;
-    case 2:
-      Serial.print("non-standard USB");
-      break;
-    case 3:
-      Serial.print("OTG");
-      break;
-  }
-  Serial.println("");
-  
-  uint8_t charge_status = (status&0b00110000) >> 4;
-  Serial.print("Charging status: ");
-    switch (charge_status) {
-    case 0:
-      Serial.print("not charging");
-      break;
-    case 1:
-      Serial.print("pre-charge");
-      break;
-    case 2:
-      Serial.print("fast charging");
-      break;
-    case 3:
-      Serial.print("charge termination");
-      break;
-  }
-  Serial.println("");
-  
-  Serial.print("DPM_STAT: ");
-  Serial.print(bitRead(status, 3),HEX);
-  Serial.print(" PG_STAT: ");
-  Serial.print(bitRead(status, 2),HEX);
-  Serial.print(" THERM_STAT: ");
-  Serial.print(bitRead(status, 1),HEX);
-  Serial.print(" VSYS_STAT: ");
-  Serial.println(bitRead(status, 0),HEX);
 
-  uint8_t faults = charger.getFaults();
-    Serial.print("Faults: 0b");
-    Serial.println(faults,BIN);  // Gets charger status
-    
-    //Decode status:
-    uint8_t chg_fault = (faults&0b00110000) >> 4;
-    Serial.print("Charging fault: ");
-    switch (chg_fault) {
-    case 0:
-      Serial.print("none");
-      break;
-    case 1:
-      Serial.print("Input fault (OVP)");
-      break;
-    case 2:
-      Serial.print("Thermal shutdown");
-      break;
-    case 3:
-      Serial.print("Charge time exp.");
-      break;
-  }
-  Serial.println("");
-    
-  Serial.print("WATCHDOG_FAULT: ");
-  Serial.print(bitRead(faults, 7),HEX);
-  Serial.print(" OTG_FAULT: ");
-  Serial.print(bitRead(faults, 6),HEX);
-  Serial.print(" BAT_FAULT: ");
-  Serial.print(bitRead(faults, 3),HEX);
-  Serial.print(" NTC_FAULT_1: ");
-  Serial.print(bitRead(faults, 1),HEX);
-  Serial.print(" NTC_FAULT_0: ");
-  Serial.println(bitRead(faults, 0),HEX);
-  
-  Serial.println("");
-  Serial.println("");
-  
+  digit_debug();
+  string_debug();
   
   delay(2000);
 }
+
+/*
+ *  Function: void digit_debug()
+ *  Description: it is serial printing all the values but in bits
+ */
+void digit_debug() {
+  Serial.println("---------------------");
+  Serial.print("VBus: ");
+  Serial.println(charger.getVBus());
+
+  Serial.print("Charge: ");
+  Serial.println(charger.getCharge());
+
+  Serial.print("DMP: ");
+  Serial.println(charger.getDMP());
+
+  Serial.print("PG: ");
+  Serial.println(charger.getPG());
+
+  Serial.print("THERM: ");
+  Serial.println(charger.getTHERM());
+
+  Serial.print("VSYS: ");
+  Serial.println(charger.getVSYS());
+  
+  Serial.println("-  -  -  -  -  -  -  ");
+
+  Serial.print("Charge fault: ");
+  Serial.println(charger.getChgFault());
+
+  Serial.print("Watchdog fault: ");
+  Serial.println(charger.getWatchdogFault());
+
+  Serial.print("OTG fault: ");
+  Serial.println(charger.getOTGFault());
+
+  Serial.print("BAT fault: ");
+  Serial.println(charger.getBATFault());
+
+  Serial.print("NTC1 fault: ");
+  Serial.println(charger.getNTC1Fault());
+
+  Serial.print("NTC0 fault: ");
+  Serial.println(charger.getNTC0Fault());
+}
+
+/*
+ *  Function: void string_debug()
+ *  Description: it is writing all data to serial but in strings - more readble
+ */
+void string_debug() {
+  Serial.println("---------------------");
+  Serial.print("VBus: ");
+  switch(charger.getVBus()) { 
+    case 0: Serial.println("unknown");            break; 
+    case 1: Serial.println("USB");                break; 
+    case 2: Serial.println("non-standard USB");   break; 
+    case 3: Serial.println("OTG");                break; 
+  } 
+
+  Serial.print("Charge: ");
+  switch(charger.getCharge()) {
+    case 0: Serial.println("Not charging");       break;
+    case 1: Serial.println("Pre-charge");         break;
+    case 2: Serial.println("Fast charging");      break;
+    case 3: Serial.println("Charge termination"); break;
+  }
+
+  Serial.print("DMP: ");
+  Serial.println(charger.getDMP() ? "Not DPM" : "VINDPM or IINDPM");
+
+  Serial.print("PG: ");
+  Serial.println(charger.getPG() ? "Power good" : "Not good power");
+
+  Serial.print("THERM: ");
+  Serial.println(charger.getTHERM() ? "In thermal regulation" : "Normal status");
+
+  Serial.print("VSYS: ");
+  Serial.println(charger.getVSYS() ? "BAT < VSYSMIN" : "BAT > VSYSMIN");
+  
+  Serial.println("-  -  -  -  -  -  -  ");
+
+  Serial.print("Charge fault: ");
+  switch(charger.getChgFault()) {
+    case 0: Serial.println("none");               break;
+    case 1: Serial.println("Input fault (OVP)");  break;
+    case 2: Serial.println("Thermal shutdown");   break;
+    case 3: Serial.println("Charge time exp.");   break;
+  }
+
+  Serial.print("Watchdog fault: ");
+  Serial.println(charger.getWatchdogFault() ? "Watchdog timer expiration" : "Normal");
+
+  Serial.print("OTG fault: ");
+  Serial.println(charger.getOTGFault() ? "VBUS overloaded or VBUS OVP in boost mode" : "Normal");
+
+  Serial.print("BAT fault: ");
+  Serial.println(charger.getBATFault() ? "BatOVP" : "Normal");
+
+  Serial.print("NTC1 fault: ");
+  Serial.println(charger.getNTC1Fault());
+
+  Serial.print("NTC0 fault: ");
+  Serial.println(charger.getNTC0Fault());
+}
+

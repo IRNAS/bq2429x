@@ -2,6 +2,40 @@
 BQ24296/BQ24297 LiPo charger i2c library for bq2429x I2C Controlled 3-A Single Cell USB Charger With Narrow VDC
 Power Path Management and Adjustable Voltage USB OTG
 
+### Modification Aug 2017
+Several functions are added to make debugging the values and reading them easier.
+
+#### New functions:
+```getStatus()``` - reads the status register
+
+```getFaults()``` - reads the fault register
+
+```getVBus()``` - gets the VBus bit
+
+```getCharge()``` - gets the charge bit
+
+```getDMP()``` - gets the DMP bit
+
+```getPG()``` - gets the PG bit
+
+```getTHERM()``` - gest the therm bit
+
+```getVSYS()``` - gets the VSYS bit
+
+```getChgFault()``` - gets the charge fault bit
+
+```getWatchdogFault()``` - gets the watchdog fault bit
+
+```getOTGFault()``` - gets the OTG fault bit
+
+```getBATFault()``` - gets the BAT fault bit
+
+```getNTC1Fault()```, ```getNTC0Fault()``` - gets the NTC1 and NTC0 bit
+
+
+```digit_debug()``` - prints out the values in bits (1 and 0)
+```string_debug()``` - prints out the values in strings (it is more readable) 
+
 ---
 
 #### License
