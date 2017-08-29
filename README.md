@@ -34,6 +34,7 @@ Several functions are added to make debugging the values and reading them easier
 
 
 ```digit_debug()``` - prints out the values in bits (1 and 0)
+
 ```string_debug()``` - prints out the values in strings (it is more readable) 
 
 ---
