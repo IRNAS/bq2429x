@@ -4,7 +4,7 @@
  */
 
 #include <Wire.h>
-#include "bq2429x.h"
+#include <bq2429x.h>
 
 bq2429x charger;
 
